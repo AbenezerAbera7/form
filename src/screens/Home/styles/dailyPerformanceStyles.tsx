@@ -1,0 +1,90 @@
+import { StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
+import { fonts } from "../../../config/global";
+const { width, height } = Dimensions.get("window");
+
+export const dailyPerformanceStyles = StyleSheet.create({
+  background: {
+    // height: height * 0.2,
+    borderRadius: 20,
+    // backgroundColor: "#cecece",
+    // flexDirection: "row",
+    // marginTop: 20,
+    width: width * 0.55,
+    // position: "absolute",
+    // right: 0,
+    // bottom: 0,
+  },
+  profitText: {
+    marginTop: 5,
+    marginLeft: 10,
+    color: "white",
+    // textAlign: "center",
+    fontFamily: fonts.primary,
+    fontWeight: "bold",
+  },
+  profit: {
+    // overflow: "hidden",
+    // height: height * 0.2,
+    // backgroundColor: "white",
+    // borderRadius: 20,
+    // flex: 1,
+    // marginHorizontal: 10,
+    // maxHeight: height * 0.07,
+    // width: width * 0.55,
+    position: "absolute",
+    right: 10,
+    top: height * 0.12,
+  },
+  iconContainer: {
+    backgroundColor: "#96abe0",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  icon: {
+    // marginTop: 10,
+    // marginLeft: 10,
+  },
+  balanceContainer: {},
+  amount: {
+    // backgroundColor: "white",
+    marginLeft: 10,
+    marginTop: 10,
+    fontSize: 20,
+    flex: 1,
+  },
+  profitMessage: {
+    flexDirection: "row",
+    marginLeft: 10,
+    marginTop: 10,
+    alignItems: "center",
+    flex: 1,
+  },
+  decreaseMessage: {
+    marginLeft: 5,
+    color: "red",
+    fontWeight: "bold",
+    fontSize: 13,
+    fontFamily: fonts.primary,
+  },
+  increaseMessage: {
+    marginLeft: 5,
+    color: "green",
+    fontWeight: "bold",
+    fontSize: 13,
+    fontFamily: fonts.primary,
+  },
+  customers: {
+    // height: height * 0.2,
+    // backgroundColor: "white",
+    // borderRadius: 20,
+    // flex: 1,
+    marginTop: height * 0.05,
+    marginHorizontal: 10,
+  },
+});

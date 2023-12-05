@@ -1,0 +1,70 @@
+import { StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
+import { colors } from "../../../config/global";
+const { width, height } = Dimensions.get("window");
+
+export const FABStyles = StyleSheet.create({
+  background: {
+    zIndex: 1,
+  },
+  settingsButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 45,
+    zIndex: 1,
+    backgroundColor: colors.complementary,
+  },
+  mainButton: {
+    backgroundColor: colors.complementary,
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 45,
+    zIndex: 1,
+  },
+  scanButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 45,
+    zIndex: 1,
+    backgroundColor: colors.complementary,
+  },
+  notificationsButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 45,
+    zIndex: 1,
+    backgroundColor: colors.complementary,
+  },
+  downloadButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top: 45,
+    zIndex: 1,
+    backgroundColor: colors.complementary,
+  },
+});
