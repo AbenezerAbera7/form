@@ -28,6 +28,8 @@ import { View, Text } from "react-native";
 import ActionsModal from "../screens/Actions/components/ActionsModal";
 import CustomTabBarButton from "../screens/Actions/CustomTabBarButton";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import EmployeesScreen from "../screens/Employees/EmployeesScreen";
+import EmployeeDetails from "../screens/Employees/EmployeeDetails";
 
 const Tab = createBottomTabNavigator();
 
@@ -163,6 +165,8 @@ export const HomeScreenStack = () => {
           <Stack.Screen name="ScanBarcode" component={ScanBarcode} />
           <Stack.Screen name="notifications" component={Notifications} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Employees" component={EmployeesScreen} />
+          <Stack.Screen name="EmployeeDetails" component={EmployeeDetails} />
         </Stack.Navigator>
       </LocationModalProvider>
     </ModalProvider>

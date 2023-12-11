@@ -16,10 +16,16 @@ import { set } from "react-native-reanimated";
 import SignUpScreen from "../SignUp/SignUpScreen";
 import SignInScreen from "../SignIn/SignInScreen";
 import { LoginContext } from "../../../context/LoginContext";
+import EmployeeSignUpScreen from "../SignUp/EmployeeSignUp";
 const { height, width } = Dimensions.get("window");
 const WelcomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const { renderSignup, setRenderSignup } = useContext(LoginContext);
+  const {
+    renderSignup,
+    setRenderSignup,
+    renderEmployeeSignup,
+    setRenderEmployeeSignup,
+  } = useContext(LoginContext);
   const [isLoginPressed, setIsLoginPressed] = useState(false);
   const [isSignupPressed, setIsSignupPressed] = useState(false);
   const [anyButtonPressed, setAnyButtonPressed] = useState(false);
@@ -128,9 +134,15 @@ const WelcomeScreen = () => {
       >
         {anyButtonPressed ? (
           !renderSignup ? (
-            <Animated.View style={{ opacity: opacityAnimation }}>
-              <SignInScreen />
-            </Animated.View>
+            renderEmployeeSignup ? (
+              <Animated.View style={{ opacity: opacityAnimation }}>
+                <EmployeeSignUpScreen />
+              </Animated.View>
+            ) : (
+              <Animated.View style={{ opacity: opacityAnimation }}>
+                <SignInScreen />
+              </Animated.View>
+            )
           ) : (
             <Animated.View style={{ opacity: opacityAnimation }}>
               <SignUpScreen />

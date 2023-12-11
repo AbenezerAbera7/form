@@ -32,15 +32,16 @@ const SettingsScreen = () => {
     <View style={settingsScreenStyles.background}>
       <ScrollView>
         <SettingCard title="Account" iconName="account" />
+        <SettingCard
+          title="Employees"
+          iconName="account-supervisor"
+          route="Employees"
+        />
         <SettingCard title="Currency" iconName="cash-marker" />
         <SettingCard
           title="Notifications"
           iconName="bell"
           route="notifications"
-        />
-        <SettingCard
-          title="Access Management"
-          iconName="badge-account-horizontal-outline"
         />
         <SettingCard title="Appearance" iconName="format-paint" />
         <SettingCard title="Contact Us" iconName="tooltip-cellphone" />

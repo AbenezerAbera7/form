@@ -1,11 +1,20 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useRef, useMemo, useCallback, useContext } from "react";
+import React, {
+  useRef,
+  useMemo,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 import Actions from "./Actions";
 import { colors } from "../../config/global";
 import { NavigationContainer } from "@react-navigation/native";
-import { ActionsModalProvider } from "../../context/ActionsContext";
+import {
+  ActionsModalContext,
+  ActionsModalProvider,
+} from "../../context/ActionsContext";
 
 const CustomTabBarButton = (props: any) => {
   // Creates a reference to the DOM element that we can interact with

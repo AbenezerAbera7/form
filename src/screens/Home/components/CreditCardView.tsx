@@ -28,7 +28,9 @@ const CreditCardView = () => {
   }, []);
   return (
     <View style={creditCardViewStyles.background}>
-      <DailyPerformanceCard />
+      {user.isAdmin || user.permissions["viewstatistics"]["value"] ? (
+        <DailyPerformanceCard />
+      ) : null}
       <View style={{ flexDirection: "row" }}>
         <View style={creditCardViewStyles.imageContainer}>
           {isImageSelected ? (

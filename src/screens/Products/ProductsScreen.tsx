@@ -153,7 +153,7 @@ const ProductScreen = (props: any) => {
                 </View>
                 <View
                   style={{
-                    marginLeft: 10,
+                    marginLeft: 0,
                     flexDirection: "row",
                     alignItems: "center",
                   }}
@@ -196,11 +196,10 @@ const ProductScreen = (props: any) => {
                 style={{
                   fontSize: 14,
                   fontWeight: "normal",
-                  fontStyle: "italic",
-                  color: "#666666",
+                  color: colors.black,
                 }}
               >
-                {"Barcode: " + product.barcode}
+                {"barcode: " + product.barcode}
               </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -208,13 +207,12 @@ const ProductScreen = (props: any) => {
                 <Text
                   style={{
                     fontSize: 14,
-                    fontWeight: "normal",
+                    fontWeight: "bold",
                     marginLeft: 0,
-                    fontStyle: "italic",
-                    color: colors.complementary,
+                    color: colors.black,
                   }}
                 >
-                  {"Price: " + product.price + " ETB"}
+                  {product.price + " ETB"}
                 </Text>
               </View>
             </View>

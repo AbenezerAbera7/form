@@ -10,6 +10,8 @@ import React, {
 interface ModalContextType {
   modalVisible: boolean;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
+  bottomSheetRef: any;
+  setBottomSheetRef: Dispatch<SetStateAction<any>>;
   sellProductModalVisible: boolean;
   setSellProductModalVisible: Dispatch<SetStateAction<boolean>>;
   closeActionsTab: boolean;
@@ -19,6 +21,8 @@ interface ModalContextType {
 const defaultModalContext = {
   modalVisible: false,
   setModalVisible: () => {},
+  bottomSheetRef: null,
+  setBottomSheetRef: () => {},
   sellProductModalVisible: false,
   setSellProductModalVisible: () => {},
   closeActionsTab: false,
@@ -35,11 +39,14 @@ const ActionsModalProvider = ({ children }: ModalProviderProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sellProductModalVisible, setSellProductModalVisible] = useState(false);
   const [closeActionsTab, setCloseActionsTab] = useState(false);
+  const [bottomSheetRef, setBottomSheetRef] = useState<any>(null);
   return (
     <ActionsModalContext.Provider
       value={{
         modalVisible,
         setModalVisible,
+        bottomSheetRef,
+        setBottomSheetRef,
         sellProductModalVisible,
         setSellProductModalVisible,
         closeActionsTab,

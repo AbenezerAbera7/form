@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { performanceCardStyles } from "../../../styles/ITR";
 import { LineChart, BarChart } from "react-native-gifted-charts";
@@ -7,10 +7,20 @@ import GraphHeader from "../../GraphHeader";
 import TopPicksCard from "../../TopPicksCard";
 import { topPickCardStyles } from "../../../styles/topPickCard";
 import { colors } from "../../../../../config/global";
+import { handleGetTransactionsType } from "../../../../../api-endpoints/product-endpoint";
+
 
 // Inventory Turnover Ratio
 const ITR = (props: any) => {
+  
   const navigation = useNavigation();
+
+  useEffect(()=>{
+    (async()=>{
+      const tr = await handleGetTransactionsType()
+      // console.log(tr)
+    })()
+  },[])
   var shoeNames = [
     "Nike Air Force 1",
     "Nike Air Max",

@@ -12,6 +12,8 @@ interface LoginContextType {
   setRenderSignup: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  renderEmployeeSignup: boolean;
+  setRenderEmployeeSignup: Dispatch<SetStateAction<boolean>>;
 }
 
 const defaultLoginContext = {
@@ -19,6 +21,8 @@ const defaultLoginContext = {
   setRenderSignup: () => {},
   isLoading: false,
   setIsLoading: () => {},
+  renderEmployeeSignup: false,
+  setRenderEmployeeSignup: () => {},
 } as LoginContextType;
 
 const LoginContext = createContext(defaultLoginContext);
@@ -30,6 +34,7 @@ type LoginProviderProps = {
 const LoginProvider = ({ children }: LoginProviderProps) => {
   const [renderSignup, setRenderSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [renderEmployeeSignup, setRenderEmployeeSignup] = useState(false);
   return (
     <LoginContext.Provider
       value={{
@@ -37,6 +42,8 @@ const LoginProvider = ({ children }: LoginProviderProps) => {
         setRenderSignup,
         isLoading,
         setIsLoading,
+        renderEmployeeSignup,
+        setRenderEmployeeSignup,
       }}
     >
       {children}

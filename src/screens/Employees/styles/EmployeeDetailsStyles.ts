@@ -1,18 +1,18 @@
-import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "../../../config/global";
 const { width, height } = Dimensions.get("window");
 
-export const contactDetailStyles = StyleSheet.create({
+export const EmployeeDetailsStyles = StyleSheet.create({
   background: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.complementary,
     height: height,
     width: width,
   },
   contactContainer: {
     width: width,
     height: height * 0.8,
-    backgroundColor: "white",
+    // minHeight: height * 0.8,
+    backgroundColor: colors.background,
     position: "absolute",
     bottom: 0,
     borderRadius: 40,
@@ -36,7 +36,7 @@ export const contactDetailStyles = StyleSheet.create({
     width: width * 0.5,
     height: width * 0.5,
     borderRadius: width * 0.25,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.complementary,
     alignSelf: "center",
     marginTop: -width * 0.25,
   },
@@ -73,5 +73,20 @@ export const contactDetailStyles = StyleSheet.create({
   },
   details: {
     marginTop: 30,
+  },
+  confirmText: {
+    color: "white",
+    alignSelf: "center",
+  },
+  confirmButton: {
+    alignSelf: "center",
+    backgroundColor: colors.complementary,
+    width: "30%",
+    height: 40,
+    borderRadius: 10,
+    // padding: 10,
+    // marginTop: 20,
+    justifyContent: "center",
+    marginTop: 20,
   },
 });

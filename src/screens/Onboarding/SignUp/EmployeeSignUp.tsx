@@ -26,13 +26,13 @@ import { LoginContext } from "../../../context/LoginContext";
 import { handleCreateUser } from "../../../api-endpoints/user-endpoint";
 import { UserContext } from "../../../context/UserContext";
 import { colors } from "../../../config/global";
+import { handleVerifySignupCode } from "../../../api-endpoints/employee-endpoint";
 
 const { height, width } = Dimensions.get("window");
 const auth = getAuth();
 
 type AuthValues = {
-  FirstName: string;
-  LastName: string;
+  signUpCode: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -40,20 +40,18 @@ type AuthValues = {
 };
 
 const InputFieldKeys: { [key: string]: string } = {
-  FirstName: "First Name",
-  LastName: "Last Name",
+  signUpCode: "Sign Up Code (Shared by Admin)",
   email: "Email",
   password: "Password",
   confirmPassword: "Confirm Password",
 };
 
-const SignUpScreen = () => {
+const EmployeeSignUpScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { setRenderSignup, setRenderEmployeeSignup } = useContext(LoginContext);
   const { user, setUser } = useContext(UserContext);
   const [authValues, setAuthValues] = useState<AuthValues>({
-    FirstName: "",
-    LastName: "",
+    signUpCode: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -61,6 +59,31 @@ const SignUpScreen = () => {
   });
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const verifySignUpCode = async () => {
+    const signUpCode = authValues.signUpCode.split("_");
+    if (signUpCode.length !== 2) {
+      setAuthValues({
+        ...authValues,
+        error: "Please enter a valid sign up code",
+      });
+      return false;
+    }
+    const employeeId = signUpCode[0];
+    const adminId = signUpCode[1];
+    const account = await handleVerifySignupCode(employeeId, adminId);
+
+    if (account) {
+      return account;
+    } else {
+      setAuthValues({
+        ...authValues,
+        error: "Please enter a valid sign up code",
+      });
+      return false;
+    }
+  };
+
   const handleSignUp = async () => {
     setIsLoading(true);
     // check if there are empty fields
@@ -69,11 +92,10 @@ const SignUpScreen = () => {
       error: "",
     });
     if (
-      authValues.email === "" ||
+      authValues.signUpCode === "" ||
       authValues.password === "" ||
       authValues.confirmPassword === "" ||
-      authValues.FirstName === "" ||
-      authValues.LastName === ""
+      authValues.email === ""
     ) {
       setIsLoading(false);
       setAuthValues({
@@ -85,11 +107,18 @@ const SignUpScreen = () => {
 
     // check if password and confirm password match
     if (authValues.password !== authValues.confirmPassword) {
-      console.log("passwords do not match");
+      setIsLoading(false);
       setAuthValues({
         ...authValues,
         error: "Passwords do not match",
       });
+      return;
+    }
+
+    // check if sign up code is valid
+    const account = await verifySignUpCode();
+    if (!account) {
+      setIsLoading(false);
       return;
     }
 
@@ -108,12 +137,15 @@ const SignUpScreen = () => {
         const { uid } = user;
         // create user in database
         const newUser = {
-          FirstName: authValues.FirstName,
-          LastName: authValues.LastName,
           email: authValues.email,
           uid: uid,
-          showOnboarding: true,
-          isAdmin: true,
+          showOnboarding: false,
+          isAdmin: false,
+          adminId: authValues.signUpCode.split("_")[1],
+          employeeId: authValues.signUpCode.split("_")[0],
+          FirstName: account.FirstName,
+          LastName: account.LastName,
+          permissions: account.permissions,
         };
         await handleCreateUser(newUser, uid);
       }
@@ -162,36 +194,26 @@ const SignUpScreen = () => {
         {/* Create New Account Text */}
         <View style={signupScreenStyles.headerTextContainer}>
           <Text style={signupScreenStyles.headerText}>
-            Create a new account
+            Begin Your Team Membership
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setRenderEmployeeSignup(true);
-              setRenderSignup(false);
-            }}
-          >
-            <Text style={signupScreenStyles.employeeLoginText}>
-              Sign up as an employee?
-            </Text>
-          </TouchableOpacity>
         </View>
         {/* Add Image */}
         {/* <View style={signupScreenStyles.imageContainer}>
-          {isImageSelected ? (
-            <Image
-              style={signupScreenStyles.image}
-              source={require("../../../api/DevData/pictures/Elon.png")}
-            />
-          ) : (
-            <Image
-              style={signupScreenStyles.image}
-              source={require("../../../api/DevData/pictures/Elon.png")}
-            />
-          )}
-          <TouchableOpacity style={signupScreenStyles.addImageIconContainer}>
-            <Ionicons name="camera-outline" size={24} color="black" />
-          </TouchableOpacity>
-        </View> */}
+            {isImageSelected ? (
+              <Image
+                style={signupScreenStyles.image}
+                source={require("../../../api/DevData/pictures/Elon.png")}
+              />
+            ) : (
+              <Image
+                style={signupScreenStyles.image}
+                source={require("../../../api/DevData/pictures/Elon.png")}
+              />
+            )}
+            <TouchableOpacity style={signupScreenStyles.addImageIconContainer}>
+              <Ionicons name="camera-outline" size={24} color="black" />
+            </TouchableOpacity>
+          </View> */}
         {/* Input Fields */}
         <View style={signupScreenStyles.formContainer}>
           {Object.keys(InputFieldKeys).map((key) => {
@@ -225,61 +247,29 @@ const SignUpScreen = () => {
             {authValues.error}
           </Text>
         </View>
-        {/* Alternate Sign Up Methods */}
-        <View>
-          <View>
-            <Text style={signInScreenStyles.alternateLoginText}>
-              Or sign up with
-            </Text>
-          </View>
-          <View style={signInScreenStyles.alternateLoginIcons}>
-            <TouchableOpacity
-              style={signInScreenStyles.alternateLoginIconContainer}
-            >
-              <Image
-                style={signInScreenStyles.alternateLoginIcon}
-                source={require("../../../assets/images/google.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={signInScreenStyles.alternateLoginIconContainer}
-            >
-              <Image
-                style={signInScreenStyles.alternateLoginIcon}
-                source={require("../../../assets/images/facebook.png")}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={signInScreenStyles.alternateLoginIconContainer}
-            >
-              <Image
-                style={signInScreenStyles.alternateLoginIcon}
-                source={require("../../../assets/images/twitter.png")}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "baseline",
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "baseline",
+          }}
+        >
+          <Text style={signInScreenStyles.alternateLoginText}>
+            Already a user?
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setRenderEmployeeSignup(false);
+              setRenderSignup(false);
             }}
           >
-            <Text style={signInScreenStyles.alternateLoginText}>
-              Already a user?
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setRenderSignup(false);
-              }}
-            >
-              <Text style={signInScreenStyles.signUpText}>Log in</Text>
-            </TouchableOpacity>
-          </View>
+            <Text style={signInScreenStyles.signUpText}>Log in</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAwareScrollView>
   );
 };
 
-export default SignUpScreen;
+export default EmployeeSignUpScreen;

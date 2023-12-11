@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { constant } from "../../styles/constantscreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { handleGetTransactions } from "../../api-endpoints/product-endpoint";
+import { colors } from "../../config/global";
 
 const ProductDescription = (props: any) => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ const ProductDescription = (props: any) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: true,
+      headerShown: false,
       title: "",
     });
   });
@@ -49,7 +50,7 @@ const ProductDescription = (props: any) => {
           width: width * 0.9,
           // height: height * 0.4,
           // marginBottom: 10,
-          marginTop: 30,
+          marginTop: 10,
           borderRadius: 20,
           backgroundColor: "white",
           alignItems: "flex-start",
@@ -61,38 +62,28 @@ const ProductDescription = (props: any) => {
         <View style={{ flexDirection: "column", width: width * 0.8 }}>
           <Text
             style={{
-              fontSize: 25,
-              fontWeight: "bold",
-              marginBottom: 3,
-              marginLeft: 20,
-            }}
-          >
-            {name}
-          </Text>
-          <Text
-            style={{
               fontSize: 16,
               fontWeight: "normal",
               fontStyle: "italic",
               marginLeft: 20,
               marginTop: 10,
-              color: "#666666",
+              // color: "#666666",
             }}
           >
             {description}
           </Text>
           <Text
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: "normal",
-              fontStyle: "italic",
+              // fontStyle: "italic",
               marginLeft: 20,
               textDecorationLine: "underline",
               marginTop: 10,
-              color: "#666666",
+              // color: "#666666",
             }}
           >
-            {"BarCode: " + barCode}
+            {"Barcode: " + barCode}
           </Text>
         </View>
       </View>
@@ -121,7 +112,7 @@ const ProductDescription = (props: any) => {
             marginTop: 25,
             alignSelf: "center",
             borderRadius: 15,
-            backgroundColor: "black",
+            backgroundColor: colors.complementary,
             alignItems: "center",
             justifyContent: "center",
             alignContent: "center",
@@ -129,8 +120,8 @@ const ProductDescription = (props: any) => {
         >
           <Text
             style={{
-              fontSize: 20,
-              fontWeight: "bold",
+              fontSize: 16,
+              // fontWeight: "bold",
               color: "white",
               fontFamily: constant.fontFamily,
             }}
@@ -146,30 +137,45 @@ const ProductDescription = (props: any) => {
     return (
       <View
         style={{
-          borderBottomWidth: 1,
-          marginHorizontal: 20,
-          flexDirection: "row",
-          marginTop: 10,
-          paddingBottom: 10,
+          width: width * 0.9,
+          backgroundColor: "white",
+          borderRadius: 20,
+          marginBottom: 10,
+          minHeight: 100,
         }}
       >
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            {item.type === "purchase" ? "Purchased" : "Sold"}
-          </Text>
-          <Text style={{ fontSize: 12, fontWeight: "normal" }}>
-            {item.date}
-          </Text>
-        </View>
-        <View>
-          <Text style={{ textAlign: "left" }}>amount: {item.amount}</Text>
-          <Text style={{ textAlign: "left" }}>
-            Unit price: {item.unitPrice} Birr
-          </Text>
-          <Text style={{ textAlign: "left" }}>
-            Production date: {item.production}
-          </Text>
-          <Text style={{ textAlign: "left" }}>Expiry date: {item.expiry}</Text>
+        <View
+          style={{
+            // borderBottomWidth: 1,
+            marginHorizontal: 20,
+            flexDirection: "row",
+            // marginTop: 10,
+            paddingVertical: 10,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              {item.type === "purchase" ? "Purchased" : "Sold"}
+            </Text>
+            <Text style={{ fontSize: 12, fontWeight: "normal" }}>
+              {item.dateString}
+            </Text>
+          </View>
+          <View>
+            <Text style={{ textAlign: "left" }}>
+              Purchase price: {item.purchasePrice} Birr
+            </Text>
+            <Text style={{ textAlign: "left" }}>
+              Selling price: {item.sellingPrice} Birr
+            </Text>
+            <Text style={{ textAlign: "left" }}>amount: {item.quantity}</Text>
+            <Text style={{ textAlign: "left" }}>
+              Production date: {item.production}
+            </Text>
+            <Text style={{ textAlign: "left" }}>
+              Expiry date: {item.expiry}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -177,31 +183,11 @@ const ProductDescription = (props: any) => {
 
   const renderStockTransactions = () => {
     return (
-      <View
-        style={{
-          width: width * 0.9,
-          backgroundColor: "white",
-          borderRadius: 20,
-          marginTop: 30,
-          minHeight: 100,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            marginTop: 30,
-            marginLeft: 20,
-          }}
-        >
-          Stock Transactions
-        </Text>
-        <ScrollView style={{ paddingVertical: 20 }}>
-          {transaction.map((item: any, index: number) => {
-            return renderTransaction(item, index);
-          })}
-        </ScrollView>
-      </View>
+      <ScrollView style={{ paddingVertical: 10 }}>
+        {transaction.map((item: any, index: number) => {
+          return renderTransaction(item, index);
+        })}
+      </ScrollView>
     );
   };
 
@@ -225,7 +211,32 @@ const ProductDescription = (props: any) => {
           />
         ) : null}
       </View>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          // marginBottom: 3,
+          marginTop: 30,
+          marginLeft: 20,
+          alignSelf: "flex-start",
+          color: colors.primary,
+        }}
+      >
+        {name}
+      </Text>
       {renderDetails()}
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          marginTop: 30,
+          marginLeft: 20,
+          alignSelf: "flex-start",
+          color: colors.primary,
+        }}
+      >
+        Transaction History
+      </Text>
       {renderStockTransactions()}
       {renderEditButton(available)}
     </ScrollView>

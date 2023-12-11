@@ -229,7 +229,6 @@ const SellProductModal = () => {
             <TextInput
               onChangeText={(x) => setCustomerName(x)}
               placeholder="Name"
-              keyboardType="numeric"
               style={sellProductStyles.customerInput}
             />
           </View>
@@ -265,7 +264,6 @@ const SellProductModal = () => {
             <TextInput
               onChangeText={(x) => setCustomerCompany(x)}
               placeholder="Company"
-              keyboardType="numeric"
               style={sellProductStyles.customerInput}
             />
           </View>

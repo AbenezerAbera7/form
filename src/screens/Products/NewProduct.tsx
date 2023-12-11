@@ -15,10 +15,12 @@ import {
 } from "react-native";
 import db from "../../auth/useAuthentication";
 import {
+  getRemainingStock,
   handleAddTransaction,
+  handleAddtoStock,
   handleCreateProduct,
 } from "../../api-endpoints/product-endpoint";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialIcons";
 const { width, height } = Dimensions.get("window");
 import * as ImagePicker from "expo-image-picker";
 
@@ -47,13 +49,21 @@ const NewProduct = (props: any) => {
       headerStyle: {
         backgroundColor: "#ccffff",
       },
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Product" as never)}
+          style={{ marginLeft: 10 }}
+        >
+          <Icon name="keyboard-backspace" size={25} color="black" />
+        </TouchableOpacity>
+      ),
     });
   });
   const [newProduct, setNewProduct] = useState({
     id: "",
     productName: "",
     description: "",
-    barcode: "",
+    barcode: 0,
     stock: 0,
     image: "",
     price: 0,
@@ -62,7 +72,7 @@ const NewProduct = (props: any) => {
     entry: "",
     production: "",
     expiry: "",
-    purchasePrice: "",
+    purchasePrice: 0,
   });
 
   useEffect(() => {
@@ -79,14 +89,24 @@ const NewProduct = (props: any) => {
       return () => unsubscribe(); */
   }, []);
 
-  const handleInputChange = (field: any, value: any) => {
+  const handleInputChange = (
+    field: any,
+    value: any,
+    isNumeric: boolean = false
+  ) => {
     setNewProduct({
       ...newProduct,
-      [field]: value,
+      [field]: isNumeric ? Number(value) : value,
     });
   };
 
-  const inputter = (field: any, value: any, placeholder: any, header: any) => {
+  const inputter = (
+    field: any,
+    value: any,
+    placeholder: any,
+    header: any,
+    isNumeric: boolean = false
+  ) => {
     return (
       <View
         style={{
@@ -118,7 +138,8 @@ const NewProduct = (props: any) => {
           }}
           placeholder={placeholder}
           value={value}
-          onChangeText={(value) => handleInputChange(field, value)}
+          onChangeText={(value) => handleInputChange(field, value, isNumeric)}
+          keyboardType={isNumeric ? "numeric" : "default"}
         />
       </View>
     );
@@ -171,18 +192,30 @@ const NewProduct = (props: any) => {
     const response = await handleCreateProduct(newProduct, uid);
 
     if (response) {
+      const date = new Date();
       const transaction = {
         type: "purchase",
-        amount: newProduct.purchasePrice,
-        date: new Date().toDateString(),
+        purchasePrice: Number(newProduct.purchasePrice),
+        date: date,
+        dateString: date.toDateString(),
         product: newProduct.productName,
         productID: response,
-        quantity: newProduct.stock,
-        unitPrice: newProduct.purchasePrice,
+        quantity: Number(newProduct.stock),
+        sellingPrice: Number(newProduct.price),
         expiry: newProduct.expiry,
         production: newProduct.production,
       };
-      const res = await handleAddTransaction(transaction, uid, response);
+      const newStock = {
+        remainingStock: Number(newProduct.stock),
+        date: date,
+        dateString: date.toDateString(),
+        product: newProduct.productName,
+        productID: response,
+        purchasePrice: Number(newProduct.purchasePrice),
+      };
+      await handleAddTransaction(transaction, uid);
+      await handleAddtoStock(uid, response, newStock);
+
       Alert.alert("Product created successfully.");
       setRefresh(true);
       navigation.goBack();
@@ -314,11 +347,6 @@ const NewProduct = (props: any) => {
           Fill out the following fields
         </Text>
 
-        {/* <TextInput
-          placeholder="Product Name"
-          value={newProduct.productName}
-          onChangeText={(value) => handleInputChange('productName', value)}
-        /> */}
         {renderImagePicker()}
         {inputter(
           "productName",
@@ -332,19 +360,21 @@ const NewProduct = (props: any) => {
           "Description",
           "Description"
         )}
-        {inputter("barcode", newProduct.barcode, "Barcode", "Barcode")}
-        {inputter("stock", newProduct.stock, "Stock", "Stock")}
+        {inputter("barcode", newProduct.barcode, "Barcode", "Barcode", true)}
+        {inputter("stock", newProduct.stock, "Stock", "Stock", true)}
         {inputter(
           "purchasePrice",
           newProduct.purchasePrice,
           "How much did you buy it for?",
-          "Purchase Price (unit)"
+          "Purchase Price (unit)",
+          true
         )}
         {inputter(
           "price",
           newProduct.price,
-          "Price (How much are you selling it for?)",
-          "Price (unit)"
+          "How much are you selling it for?",
+          "Anticipated Selling Price (unit)",
+          true
         )}
         {/* {inputter("entry", newProduct.entry, "Entry Date", "Entry Date")} */}
         {inputter(
@@ -354,74 +384,6 @@ const NewProduct = (props: any) => {
           "Production Date"
         )}
         {inputter("expiry", newProduct.expiry, "Expiry Date", "Expiry Date")}
-        <Text style={{ fontSize: 20, fontWeight: "900", alignSelf: "center" }}>
-          Availability
-        </Text>
-        <View style={{ alignContent: "center", justifyContent: "center" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignContent: "space-between",
-              justifyContent: "center",
-              width: width * 0.7,
-              alignSelf: "center",
-              marginBottom: 25,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => handleInputChange("availability", true)}
-              style={{ marginTop: 20, marginLeft: -20 }}
-            >
-              <View
-                style={{
-                  width: width * 0.3,
-                  borderRadius: 10,
-                  backgroundColor: newProduct.availability ? "#23ff49" : "gray",
-                  height: width * 0.1,
-                  justifyContent: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "900",
-                    fontFamily: "System",
-                    color: newProduct.availability ? "black" : "white",
-                    alignSelf: "center",
-                  }}
-                >
-                  {"Available"}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleInputChange("availability", false)}
-              style={{ marginTop: 20, marginLeft: 20 }}
-            >
-              <View
-                style={{
-                  width: width * 0.3,
-                  borderRadius: 10,
-                  backgroundColor: !newProduct.availability ? "red" : "gray",
-                  height: width * 0.1,
-                  justifyContent: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "900",
-                    fontFamily: "System",
-                    color: "white",
-                    alignSelf: "center",
-                  }}
-                >
-                  {"Out of Stock"}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
         <TouchableOpacity
           onPress={() => handleSubmit("")}
           style={{ alignSelf: "center", marginTop: 20, marginBottom: 20 }}

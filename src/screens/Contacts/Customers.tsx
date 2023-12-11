@@ -278,11 +278,6 @@ const Customers = (props: any) => {
           </View>
         )
       ) : (
-        // <ScrollView style={{ marginTop: 5, paddingBottom: 250 }}>
-        //   {searchContacts(contacts).map((contact: any, idx: any) => {
-        //     return renderContactWidget(contact, idx);
-        //   })}
-        // </ScrollView>
         <FlatList
           data={searchContacts(contacts)}
           renderItem={renderItem}

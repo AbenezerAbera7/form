@@ -4,6 +4,7 @@ import { actionCardStyles } from "../styles/actionCardStyles";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { ActionsModalContext } from "../../../context/ActionsContext";
+import { useBottomSheet } from "@gorhom/bottom-sheet";
 
 const ActionCard = ({
   iconName,
@@ -14,14 +15,20 @@ const ActionCard = ({
   Title: string;
   action?: { type: string; ref?: any };
 }) => {
-  const { sellProductModalVisible, setSellProductModalVisible } =
-    useContext(ActionsModalContext);
+  const {
+    sellProductModalVisible,
+    setSellProductModalVisible,
+    setModalVisible,
+  } = useContext(ActionsModalContext);
+  const { close } = useBottomSheet();
   const [expandOptions, setExpandOptions] = useState(false);
   const navigation = useNavigation<any>();
   const handleAction = () => {
     if (action) {
       if (action.type === "sell") {
         setSellProductModalVisible(true);
+        setModalVisible(false);
+        close();
       }
       if (action.type === "add") {
         setExpandOptions(!expandOptions);
@@ -61,6 +68,8 @@ const ActionCard = ({
               navigation.navigate("Products" as never, {
                 screen: "New-Product",
               });
+              setModalVisible(false);
+              close();
             }}
           >
             <Text style={actionCardStyles.optionText}>Stock New Products</Text>

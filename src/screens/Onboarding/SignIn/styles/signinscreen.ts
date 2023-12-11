@@ -79,4 +79,11 @@ export const signInScreenStyles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 5,
   },
+  employeeLoginText: {
+    textAlign: "center",
+    textDecorationLine: "underline",
+    color: colors.primary,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
 });

@@ -19,7 +19,7 @@ export const signupScreenStyles = StyleSheet.create({
     alignItems: "center",
   },
   formContainer: {
-    marginTop: height * 0.07,
+    marginTop: height * 0.04,
     marginHorizontal: width * 0.1,
     width: width * 0.8,
   },
@@ -69,5 +69,11 @@ export const signupScreenStyles = StyleSheet.create({
   },
   errorMessage: {
     color: "red",
+  },
+  employeeLoginText: {
+    textAlign: "center",
+    textDecorationLine: "underline",
+    color: colors.complementary,
+    fontWeight: "bold",
   },
 });
