@@ -99,10 +99,12 @@ const Vendors = (props: any) => {
             marginTop: 10,
             borderRadius: 20,
             backgroundColor: "white",
-            shadowOpacity: 0.2,
-            elevation: 20,
-            shadowRadius: 8,
+            // shadowOpacity: 0.2,
+            // elevation: 20,
+            // shadowRadius: 8,
             paddingVertical: 10,
+            borderWidth: 0.7,
+            borderColor: colors.primary,
           }}
         >
           <View

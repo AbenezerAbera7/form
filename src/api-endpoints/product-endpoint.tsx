@@ -1,4 +1,4 @@
-
+import db from "../auth/useAuthentication";
 import {
   collection,
   addDoc,
@@ -12,8 +12,8 @@ import {
   where,
   orderBy,
   limit,
+  DocumentData,
 } from "firebase/firestore";
-import db from "../auth/useAuthentication";
 
 export const handleGetProducts = async (uid: string) => {
   const productsRef = collection(db, "products", uid, "products");
@@ -143,6 +143,54 @@ export const handleAddtoStock = async (
   }
 };
 
+export const handleGetStocks = async (uid: string, productId: string) => {
+  try {
+    // get all stocks where remainingStock > 0
+    // prepare a query
+    const q = query(
+      collection(db, "products", uid, "products", productId, "stock"),
+      where("remainingStock", ">", 0)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      console.log("No matching documents.");
+      return [];
+    }
+    const stockList = querySnapshot.docs.map((doc: any) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    return stockList;
+  } catch (e) {
+    console.error("Error getting stocks: ", e);
+    return [];
+  }
+};
+
+export const handleUpdateRemainingStock = async (
+  uid: string,
+  productId: string,
+  stockId: string,
+  newRemainingStock: number
+) => {
+  try {
+    const docRef = doc(
+      db,
+      "products",
+      uid,
+      "products",
+      productId,
+      "stock",
+      stockId
+    );
+    await updateDoc(docRef, { remainingStock: newRemainingStock });
+    return true;
+  } catch (e) {
+    console.error("Error updating remaining stock: ", e);
+    return false;
+  }
+};
+
 export const getRemainingStock = async (uid: string, productId: string) => {
   try {
     // get all stocks where remainingStock > 0
@@ -168,26 +216,74 @@ export const getRemainingStock = async (uid: string, productId: string) => {
 };
 
 
-// handle get transaction logs
-export const handleGetTransactionsType = async () => {
+// handle get all transaction
+ export const handleGetAllTransactions = async (uid: string) => {
   try {
-    // get transactions limited to "num" sorted by date (latest first)
-    // prepare a query
     const q = query(
-      collection(db, "transactions",  "transactions"),
-      orderBy("date", "desc"),
+      collection(db, "transactions", uid, "transactions"),
+      limit(5)
+    
     );
-    var transactions = collection(db, "transactions");
-    // if (transactions.empty) {
-    //   console.log("No matching documents.");
-    //   return [];
-    // }
-    // const transactionsList = transactions.docs.map((doc: any) => ({
-    //   ...doc.data(),
-    //   id: doc.id,
-    // }));
-    console.log(transactions)
-    return transactions;
+    let transactions = await getDocs(q);
+    if (transactions.empty) {
+      // console.log("No matching documents.");
+      return [];
+    }
+    let transactionsList = transactions.docs.map((doc: any) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    // Group transactions by product
+    const transactionsByProduct = transactionsList.reduce((acc, transaction) => {
+      if (!acc[transaction.productID]) {
+        acc[transaction.productID] = [];
+      }
+      acc[transaction.productID].push(transaction);
+      return acc;
+    }, {});
+
+    // Filter out products that don't have both 'sell' and 'purchase' transactions
+    for (const productID in transactionsByProduct) {
+      const sellingTransactions = transactionsByProduct[productID].some((transaction: DocumentData) => transaction.type === 'sell');
+      const buyingTransactions = transactionsByProduct[productID].some((transaction: DocumentData) => transaction.type === 'purchase');
+      
+      if (!sellingTransactions || !buyingTransactions) {
+        transactionsList = transactionsList.filter(transaction => transaction.productID !== productID);
+      }
+    }
+
+    return transactionsList;
+  } catch (e) {
+    console.error("Error getting transactions: ", e);
+    return [];
+  }
+};
+
+// handle get transaction logs by their type
+export const handleGetTransactionsByType = async (uid: string, productId: any, transactionType: string) => {
+  try {
+    const q = query(
+      collection(db, "transactions", uid, "transactions"),
+      where("productID", "==", productId),
+      where("type", "==", transactionType)
+    );
+    const transactions = await getDocs(q);
+    if (transactions.empty) {
+      console.log("No matching documents. by types");
+      return [];
+    }
+    const transactionsList = transactions.docs.map((doc: any) => {
+      const data = doc.data();
+      return {
+        date: data.date,
+        productID: data.productID,
+        quantity: data.quantity,
+        cost: data.purchasePrice || 0,
+        id: doc.id,
+      };
+    });
+    return transactionsList;
   } catch (e) {
     console.error("Error getting transactions: ", e);
     return [];

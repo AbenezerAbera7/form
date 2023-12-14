@@ -6,6 +6,6 @@ const { width, height } = Dimensions.get("window");
 export const homeScreenStyles = StyleSheet.create({
   background: {
     height: height,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
 });

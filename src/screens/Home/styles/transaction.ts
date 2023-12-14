@@ -6,12 +6,12 @@ const { width, height } = Dimensions.get("window");
 export const transactionStyles = StyleSheet.create({
   background: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.primary,
+    borderBottomColor: "#e8e5e5",
     paddingBottom: height * 0.01,
     marginHorizontal: width * 0.05,
-    marginTop: 5,
+    marginTop: 2,
     flexDirection: "row",
-    height: 50,
+    height: 40,
     alignItems: "center",
     width: width * 0.85,
   },
@@ -19,7 +19,7 @@ export const transactionStyles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     textAlign: "left",
-    fontSize: 15,
+    fontSize: 13,
   },
   amount: {
     fontWeight: "bold",
@@ -29,7 +29,7 @@ export const transactionStyles = StyleSheet.create({
   amountContainer: {
     backgroundColor: colors.complementary,
     borderRadius: 10,
-    padding: 6,
-    height: 30,
+    padding: 5,
+    height: 25,
   },
 });

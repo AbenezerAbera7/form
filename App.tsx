@@ -4,15 +4,21 @@ import Main from "./src/Main";
 import { UserProvider } from "./src/context/UserContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalProvider } from "@gorhom/portal";
+import { ProductsProvider } from "./src/context/ProductsContext";
+import { ActionsModalProvider } from "./src/context/ActionsContext";
 
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <PortalProvider>
-        <UserProvider>
-          <Main />
-        </UserProvider>
-      </PortalProvider>
+      <ProductsProvider>
+        <PortalProvider>
+          <UserProvider>
+            <ActionsModalProvider>
+              <Main />
+            </ActionsModalProvider>
+          </UserProvider>
+        </PortalProvider>
+      </ProductsProvider>
     </GestureHandlerRootView>
   );
 }

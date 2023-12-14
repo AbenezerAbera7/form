@@ -19,16 +19,20 @@ const ActionCard = ({
     sellProductModalVisible,
     setSellProductModalVisible,
     setModalVisible,
+    screenToRender,
+    setScreenToRender,
   } = useContext(ActionsModalContext);
-  const { close } = useBottomSheet();
+  const { close, expand } = useBottomSheet();
   const [expandOptions, setExpandOptions] = useState(false);
   const navigation = useNavigation<any>();
   const handleAction = () => {
     if (action) {
       if (action.type === "sell") {
-        setSellProductModalVisible(true);
-        setModalVisible(false);
-        close();
+        // setSellProductModalVisible(true);
+        // setModalVisible(false);
+        // close();
+        setScreenToRender("Sell");
+        expand();
       }
       if (action.type === "add") {
         setExpandOptions(!expandOptions);
@@ -67,6 +71,7 @@ const ActionCard = ({
             onPress={() => {
               navigation.navigate("Products" as never, {
                 screen: "New-Product",
+                initial: false,
               });
               setModalVisible(false);
               close();

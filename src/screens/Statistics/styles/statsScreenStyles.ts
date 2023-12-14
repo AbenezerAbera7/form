@@ -5,7 +5,7 @@ export const statsScreenStyles = StyleSheet.create({
   background: {
     height: height,
     width: width,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     paddingTop: 20,
   },
   statsContainer: {

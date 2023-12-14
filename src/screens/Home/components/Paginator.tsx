@@ -10,7 +10,7 @@ const Paginator = (props: { data: any; scrollX: any }) => {
       style={{
         flexDirection: "row",
         // height: 30,
-        marginTop: 10,
+        marginTop: 8,
         // alignItems: "center",
         justifyContent: "center",
       }}
@@ -30,10 +30,10 @@ const Paginator = (props: { data: any; scrollX: any }) => {
         return (
           <Animated.View
             style={{
-              height: 8,
-              width: 8,
+              height: 6,
+              width: 6,
               borderRadius: 4,
-              backgroundColor: colors.complementary,
+              backgroundColor: colors.primary,
               marginHorizontal: 8,
               opacity,
             }}

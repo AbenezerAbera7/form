@@ -43,6 +43,6 @@ export const contactScreenStyles = StyleSheet.create({
   background: {
     width: width,
     height: height,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
 });

@@ -37,7 +37,7 @@ const ContactScreen = (props: any) => {
       style={{
         height: "100%",
         width: "100%",
-        backgroundColor: colors.background,
+        backgroundColor: colors.white,
       }}
     >
       <Tab.Navigator

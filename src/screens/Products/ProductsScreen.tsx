@@ -24,7 +24,8 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const ProductScreen = (props: any) => {
   const navigation = useNavigation();
-  const [products, setProducts] = useState<any[]>([]);
+  // const [products, setProducts] = useState<any[]>([]);
+  const { products, setProducts } = useContext(ProductsContext);
   const [text, setText] = useState("");
   const [loadingData, setLoadingData] = useState(false);
   const [loadedData, setLoadedData] = useState(false);
@@ -33,7 +34,9 @@ const ProductScreen = (props: any) => {
   const { refresh, setRefresh } = useContext(ProductsContext);
   const tabBarHeight = useBottomTabBarHeight();
   useEffect(() => {
-    getProducts();
+    if (products.length == 0 || refresh) {
+      getProducts();
+    }
   }, [refresh]);
 
   useLayoutEffect(() => {
@@ -41,9 +44,20 @@ const ProductScreen = (props: any) => {
       headerShown: true,
       title: "Products",
       headerStyle: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.white,
       },
-      headerRight: () => {},
+      headerTitleStyle: {
+        fontWeight: "bold",
+        fontSize: 25,
+      },
+      // headerLeft: () => (
+      //   <TouchableOpacity
+      //     onPress={() => navigation.navigate("HomeScreen" as never)}
+      //     style={{ marginLeft: 10 }}
+      //   >
+      //     <Ionicons name="home" size={25} color="black" />
+      //   </TouchableOpacity>
+      // ),
     });
   });
 
@@ -95,6 +109,8 @@ const ProductScreen = (props: any) => {
             shadowOpacity: 0.2,
             elevation: 10,
             shadowRadius: 6,
+            borderColor: colors.primary,
+            borderWidth: 0.7,
           }}
         >
           <View
@@ -243,7 +259,7 @@ const ProductScreen = (props: any) => {
         alignContent: "flex-start",
         // justifyContent: "center",
         alignItems: "center",
-        backgroundColor: colors.background,
+        backgroundColor: colors.white,
         paddingTop: 10,
       }}
     >

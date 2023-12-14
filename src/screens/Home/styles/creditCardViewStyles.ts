@@ -8,7 +8,7 @@ export const creditCardViewStyles = StyleSheet.create({
     backgroundColor: colors.primary,
     // top: height * 0.15,
     // left: width * 0.03,
-    height: height * 0.26,
+    height: 200,
     width: width * 0.94,
     // maxHeight: 200,
     // maxWidth: 400,

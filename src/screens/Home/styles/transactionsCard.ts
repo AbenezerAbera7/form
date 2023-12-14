@@ -5,21 +5,23 @@ const { width, height } = Dimensions.get("window");
 
 export const transactionsCardStyles = StyleSheet.create({
   background: {
-    marginTop: height * 0.03,
+    marginTop: 8,
     marginHorizontal: width * 0.03,
     backgroundColor: "white",
     borderRadius: 20,
     maxHeight: height * 0.4,
     minHeight: height * 0.2,
     marginBottom: height * 0.1,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   title: {
     textAlign: "center",
     marginTop: height * 0.01,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: fonts.primary,
-    color: colors.primary,
+    color: colors.black,
   },
   button: {
     backgroundColor: colors.black,
@@ -34,5 +36,6 @@ export const transactionsCardStyles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+    fontSize: 12,
   },
 });

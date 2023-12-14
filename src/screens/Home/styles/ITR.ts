@@ -5,8 +5,8 @@ import { colors } from "../../../config/global";
 const { width, height } = Dimensions.get("window");
 export const performanceCardStyles = StyleSheet.create({
   background: {
-    marginTop: height * 0.03,
-    height: 300,
+    marginTop: 8,
+    height: 200,
     // marginHorizontal: width * 0.03,
     marginLeft: width * 0.03,
     marginRight: width * 0.03,
@@ -14,12 +14,14 @@ export const performanceCardStyles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     // justifyContent: "center",
-    overflow: "hidden",
+    overflow: "scroll",
+
     backgroundColor: colors.white,
     width: width * 0.94,
-    borderColor: colors.white,
-    // shadowOpacity: 0.4,
-    // shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    // shadowOpacity: 1,
+    // shadowRadius: 15,
     // elevation: 20,
   },
   tooltip: {

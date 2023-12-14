@@ -16,6 +16,8 @@ interface ModalContextType {
   setSellProductModalVisible: Dispatch<SetStateAction<boolean>>;
   closeActionsTab: boolean;
   setCloseActionsTab: Dispatch<SetStateAction<boolean>>;
+  screenToRender: string;
+  setScreenToRender: Dispatch<SetStateAction<string>>;
 }
 
 const defaultModalContext = {
@@ -27,6 +29,8 @@ const defaultModalContext = {
   setSellProductModalVisible: () => {},
   closeActionsTab: false,
   setCloseActionsTab: () => {},
+  screenToRender: "Menu",
+  setScreenToRender: () => {},
 } as ModalContextType;
 
 const ActionsModalContext = createContext(defaultModalContext);
@@ -36,10 +40,12 @@ type ModalProviderProps = {
 };
 
 const ActionsModalProvider = ({ children }: ModalProviderProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [sellProductModalVisible, setSellProductModalVisible] = useState(false);
-  const [closeActionsTab, setCloseActionsTab] = useState(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [sellProductModalVisible, setSellProductModalVisible] =
+    useState<boolean>(false);
+  const [closeActionsTab, setCloseActionsTab] = useState<boolean>(false);
   const [bottomSheetRef, setBottomSheetRef] = useState<any>(null);
+  const [screenToRender, setScreenToRender] = useState<string>("Menu");
   return (
     <ActionsModalContext.Provider
       value={{
@@ -51,6 +57,8 @@ const ActionsModalProvider = ({ children }: ModalProviderProps) => {
         setSellProductModalVisible,
         closeActionsTab,
         setCloseActionsTab,
+        screenToRender,
+        setScreenToRender,
       }}
     >
       {children}

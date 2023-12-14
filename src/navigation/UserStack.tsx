@@ -66,10 +66,10 @@ const UserStack = () => {
                       name={iconName}
                       size={size}
                       color={color}
-                      style={{ alignSelf: "center" }}
+                      style={{ alignSelf: "center", top: 5, left: 1 }}
                     />
                     <Text style={{ color: color, fontSize: 10 }}>
-                      {route.name}
+                      {route.name === "Actions" ? "" : route.name}
                     </Text>
                   </View>
                 );
@@ -78,7 +78,9 @@ const UserStack = () => {
               tabBarInactiveTintColor: colors.bottomBarInactive,
               tabBarShowLabel: false,
               tabBarStyle: {
-                backgroundColor: colors.bottomBar,
+                backgroundColor: colors.white,
+                borderTopWidth: 1,
+                borderTopColor: "rgba(0,0,0,0.1)",
               },
             };
           }}
@@ -124,17 +126,12 @@ export default UserStack;
 
 export function ProductsStack() {
   return (
-    <ProductsProvider>
-      <Stack.Navigator initialRouteName="Product">
-        <Stack.Screen name="Product" component={ProductScreen} />
-        <Stack.Screen
-          name="Product-Description"
-          component={ProductDescription}
-        />
-        <Stack.Screen name="New-Product" component={NewProduct} />
-        <Stack.Screen name="Edit-Product" component={EditProduct} />
-      </Stack.Navigator>
-    </ProductsProvider>
+    <Stack.Navigator initialRouteName="Product">
+      <Stack.Screen name="Product" component={ProductScreen} />
+      <Stack.Screen name="Product-Description" component={ProductDescription} />
+      <Stack.Screen name="New-Product" component={NewProduct} />
+      <Stack.Screen name="Edit-Product" component={EditProduct} />
+    </Stack.Navigator>
   );
 }
 

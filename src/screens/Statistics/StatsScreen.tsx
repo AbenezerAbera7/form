@@ -13,7 +13,7 @@ const StatsScreen = () => {
       headerShown: true,
       title: "Statistics",
       headerStyle: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.white,
       },
       headerTitleStyle: {
         fontWeight: "bold",
