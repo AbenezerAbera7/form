@@ -215,43 +215,21 @@ export const getRemainingStock = async (uid: string, productId: string) => {
   }
 };
 
-
 // handle get all transaction
- export const handleGetAllTransactions = async (uid: string) => {
+export const handleGetAllTransactions = async (uid: string) => {
   try {
     const q = query(
       collection(db, "transactions", uid, "transactions"),
       limit(5)
-    
     );
     let transactions = await getDocs(q);
     if (transactions.empty) {
-      // console.log("No matching documents.");
       return [];
     }
     let transactionsList = transactions.docs.map((doc: any) => ({
       ...doc.data(),
       id: doc.id,
     }));
-
-    // Group transactions by product
-    const transactionsByProduct = transactionsList.reduce((acc, transaction) => {
-      if (!acc[transaction.productID]) {
-        acc[transaction.productID] = [];
-      }
-      acc[transaction.productID].push(transaction);
-      return acc;
-    }, {});
-
-    // Filter out products that don't have both 'sell' and 'purchase' transactions
-    for (const productID in transactionsByProduct) {
-      const sellingTransactions = transactionsByProduct[productID].some((transaction: DocumentData) => transaction.type === 'sell');
-      const buyingTransactions = transactionsByProduct[productID].some((transaction: DocumentData) => transaction.type === 'purchase');
-      
-      if (!sellingTransactions || !buyingTransactions) {
-        transactionsList = transactionsList.filter(transaction => transaction.productID !== productID);
-      }
-    }
 
     return transactionsList;
   } catch (e) {
@@ -260,13 +238,15 @@ export const getRemainingStock = async (uid: string, productId: string) => {
   }
 };
 
-// handle get transaction logs by their type
-export const handleGetTransactionsByType = async (uid: string, productId: any, transactionType: string) => {
+// handle get transaction logs by their product id
+export const handleGetTransactionsByProductId = async (
+  uid: string,
+  productId: any
+) => {
   try {
     const q = query(
       collection(db, "transactions", uid, "transactions"),
-      where("productID", "==", productId),
-      where("type", "==", transactionType)
+      where("productID", "==", productId)
     );
     const transactions = await getDocs(q);
     if (transactions.empty) {

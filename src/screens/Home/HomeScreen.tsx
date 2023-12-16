@@ -20,7 +20,6 @@ import { useNavigation } from "@react-navigation/native";
 import { commonStyles } from "../../styles/common";
 import HomeNameCard from "./components/HomeNameCard";
 import ScreenIntroCard from "../../components/ScreenIntroCard";
-import ITR from "./components/Analytics/InventoryTurnoverRatio/ITR";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { homeScreenStyles } from "./styles/homescreen";
 import GROI from "./components/Analytics/GrossMarginsROI/GROI";
@@ -33,6 +32,7 @@ import TransactionsCard from "./components/TransactionsCard";
 import OnboardingScreen from "../Onboarding/Onboarding/OnboardingScreen";
 import Paginator from "./components/Paginator";
 import { colors } from "../../config/global";
+import ITR from "./components/Analytics/InventoryTurnoverRatio/ITR";
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = (props: any) => {
