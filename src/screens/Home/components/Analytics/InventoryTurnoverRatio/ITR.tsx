@@ -86,7 +86,6 @@ const ITR = ({ navigation }: ITRProps) => {
         );
       } catch (error) {
         console.error(error);
-        // handle the error as needed
       } finally {
         setIsLoading(false);
       }

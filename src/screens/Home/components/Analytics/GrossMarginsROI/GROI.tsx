@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { LineChart } from "react-native-gifted-charts";
 import GraphHeader from "../../GraphHeader";
 import { groiStyles } from "../../../styles/groi";
@@ -9,6 +9,11 @@ import { colors } from "../../../../../config/global";
 // Gross Margins Return on Investment
 
 const GROI = () => {
+  useEffect(() => {
+    // fetch the transactions
+    //  calculatee  calculateTotalGrossProfit()
+    // compute the calculateGrossProfitToInventoryRatio
+  }, []);
   var shoeNames = [
     "Nike Air Force 1",
     "Nike Air Max",
