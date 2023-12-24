@@ -1,4 +1,3 @@
-import { groupBy, sortBy } from "lodash";
 import { View, Text } from "react-native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import ProductITRTimeLineChart from "./LineChart";
@@ -9,7 +8,7 @@ import {
   calculateInventoryTurnoverRatio,
   calculateTotalInventorySold,
 } from "./ITRutils";
-import { handleGetTransactionsByProductId } from "../../../../../api-endpoints/product-endpoint";
+import { handleGetAllTransactions } from "../../../../../api-endpoints/product-endpoint";
 import { UserContext } from "../../../../../context/UserContext";
 
 const ITRDetailedView = (props: any) => {
@@ -18,7 +17,7 @@ const ITRDetailedView = (props: any) => {
   const { uid } = user;
   const item = props.route.params.item;
 
-  console.log("item", item);
+  // console.log("item", item);
   const [dataForChart, setDataForChart] = useState<
     { date: string; itr: number }[]
   >([]);
@@ -27,49 +26,7 @@ const ITRDetailedView = (props: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const productTransactions = await handleGetTransactionsByProductId(
-          uid,
-          item.productID
-        );
-        const transactionsByDate = groupBy(productTransactions, "date");
-
-        const data = [];
-
-        for (const [date, dateTransactions] of Object.entries(
-          transactionsByDate
-        )) {
-          const totalCostOfInventorySold = calculateTotalInventorySold(
-            date,
-            date,
-            item.productID,
-            dateTransactions
-          );
-          const averageInventoryValue = calculateAverageInventoryValue(
-            date,
-            date,
-            item.productID,
-            dateTransactions
-          );
-          const itr = calculateInventoryTurnoverRatio(
-            totalCostOfInventorySold,
-            averageInventoryValue
-          );
-
-          data.push({
-            date,
-            itr: itr ? itr : 0,
-          });
-        }
-
-        const sortedData = sortBy(data, "date");
-        setDataForChart(sortedData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
+      // get data for chart a line graph plotting ITR over time for each product
     };
     fetchData();
   }, []);
@@ -88,7 +45,7 @@ const ITRDetailedView = (props: any) => {
   return (
     <View style={ITRDetailedViewStyles.background}>
       <Text>{item.label}</Text>
-      <ProductITRTimeLineChart data={data} />
+      {/* <ProductITRTimeLineChart data={data} /> */}
     </View>
   );
 };

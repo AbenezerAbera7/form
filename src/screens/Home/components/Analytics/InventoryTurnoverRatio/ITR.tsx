@@ -12,6 +12,7 @@ import {
   calculateInventoryTurnoverRatio,
   calculateTotalInventorySold,
 } from "./ITRutils";
+
 interface ITRProps {
   navigation: any;
 }
@@ -20,7 +21,7 @@ const ITR = ({ navigation }: ITRProps) => {
   const { user } = useContext(UserContext);
   const { uid } = user;
 
-  const [isLoading, setIsLoading] = useState(true); // new loading state
+  const [isLoading, setIsLoading] = useState(true); 
   const [dataForChart, setDataForChart] = useState<
     { productId: string; itr: number }[]
   >([]);
@@ -30,10 +31,9 @@ const ITR = ({ navigation }: ITRProps) => {
       try {
         setIsLoading(true);
         const transactions = await handleGetAllTransactions(uid);
-        // const transactions: DocumentData[] = await fetchTransactions();
 
-        const startDate = "2023-12-05";
-        const endDate = "2023-12-14";
+        const startDate = "2023-07-25";
+        const endDate = "2023-12-23";
 
         const productIds = Array.from(
           new Set(transactions.map((transaction) => transaction.productID))
@@ -61,14 +61,8 @@ const ITR = ({ navigation }: ITRProps) => {
           const productTransaction = transactions.find(
             (transaction) => transaction.productID === productId
           );
-          // console.log(
-          //   `Total cost of inventory sold for product ${productId}: ${totalCostOfInventorySold}`
-          // );
-          // console.log(
-          //   `Average inventory value for product ${productId}: ${averageInventoryValue}`
-          // );
 
-          if (productTransaction) {
+          if (productTransaction && itr !== null) {
             itrByProduct[productId] = {
               productID: productId,
               itr: itr,
@@ -76,7 +70,6 @@ const ITR = ({ navigation }: ITRProps) => {
             };
           }
         });
-        // console.log("itrByProduct", itrByProduct);
 
         setDataForChart(
           Object.entries(itrByProduct).map(([productId, data]) => ({
@@ -86,6 +79,7 @@ const ITR = ({ navigation }: ITRProps) => {
         );
       } catch (error) {
         console.error(error);
+        // handle the error as needed
       } finally {
         setIsLoading(false);
       }
@@ -98,6 +92,7 @@ const ITR = ({ navigation }: ITRProps) => {
     value: item.itr,
     productID: item.productId,
   }));
+  console.log("Result", dataForChart);
 
   const maxValue = Math.max(...dataForChartFormatted.map((item) => item.value));
   return (
@@ -115,11 +110,11 @@ const ITR = ({ navigation }: ITRProps) => {
               data={dataForChartFormatted}
               frontColor={colors.complementary}
               hideYAxisText
-              showLine
               maxValue={maxValue}
               side={"right"}
               lineBehindBars
               dashWidth={0}
+              roundedTop
               onPress={(data: any) => {
                 navigation.navigate("ITRDetailedView", { item: data });
               }}
