@@ -10,14 +10,17 @@ import {
 } from "./ITRutils";
 import { handleGetAllTransactions } from "../../../../../api-endpoints/product-endpoint";
 import { UserContext } from "../../../../../context/UserContext";
+import { groupBy } from "lodash";
 
 const ITRDetailedView = (props: any) => {
   const navigation = useNavigation();
   const { user } = useContext(UserContext);
   const { uid } = user;
   const item = props.route.params.item;
+  console.log("item", item);
+  const startDate = "2023-07-25";
+  const endDate = "2023-12-23";
 
-  // console.log("item", item);
   const [dataForChart, setDataForChart] = useState<
     { date: string; itr: number }[]
   >([]);
@@ -26,7 +29,60 @@ const ITRDetailedView = (props: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // get data for chart a line graph plotting ITR over time for each product
+      setIsLoading(true);
+      try {
+        const transactions = await handleGetAllTransactions(uid);
+        const filteredTransactions = transactions.filter(
+          (transaction) => transaction.productID === "TeeL4XDeVP2yjuPVLtb3"
+        );
+        const groupedTransactions = groupBy(
+          filteredTransactions,
+          (transaction) => {
+            return [transaction.productID, transaction.date.toDate().getDay()];
+          }
+        );
+        console.log("groupedTransactions", groupedTransactions);
+        const dataForChart = [];
+        for (const group in groupedTransactions) {
+          const transactions = groupedTransactions[group];
+          if (transactions) {
+            console.log(transactions[0].productID);
+            const totalInventorySold = calculateTotalInventorySold(
+              transactions[0].productID,
+              startDate,
+              endDate,
+              item.productID
+            );
+            console.log("totalInventorySold", totalInventorySold);
+
+            const averageInventoryValue = calculateAverageInventoryValue(
+              transactions[0].productID,
+              startDate,
+              endDate,
+              item.productID
+            );
+            console.log("averageInventoryValue", averageInventoryValue);
+
+            let itr = calculateInventoryTurnoverRatio(
+              totalInventorySold,
+              averageInventoryValue
+            );
+            console.log("itr", itr);
+
+            if (itr === null || itr === undefined) {
+              itr = 0;
+            }
+            dataForChart.push({
+              date: groupedTransactions[group][0].date.toString(),
+              itr,
+            });
+          }
+        }
+        setDataForChart(dataForChart);
+      } catch (error) {
+        console.error(error);
+      }
+      setIsLoading(false);
     };
     fetchData();
   }, []);
@@ -45,7 +101,7 @@ const ITRDetailedView = (props: any) => {
   return (
     <View style={ITRDetailedViewStyles.background}>
       <Text>{item.label}</Text>
-      {/* <ProductITRTimeLineChart data={data} /> */}
+      <ProductITRTimeLineChart data={data} />
     </View>
   );
 };
